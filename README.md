@@ -1,6 +1,6 @@
 # OlympiaOyster-Genomics-Capstone
 
-Project Description:
+# Project Description:
 
 About the Data:
 
