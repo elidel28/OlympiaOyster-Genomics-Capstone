@@ -1,4 +1,4 @@
-# OlympiaOyster-Genomics-Capstone
+## OlympiaOyster-Genomics-Capstone
 
 # Project Description:
 
