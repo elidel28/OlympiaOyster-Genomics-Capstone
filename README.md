@@ -1,3 +1,9 @@
 # OlympiaOyster-Genomics-Capstone
 
-Project Description
+Project Description:
+
+About the Data:
+
+Tool Needed:
+
+Scipts Overview:
