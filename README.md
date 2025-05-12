@@ -1,4 +1,4 @@
-# OlympiaOyster-Genomics-Capstone
+# Olympia Oyster GTSeqPanel Pipeline
 
 # Project Description:
 
