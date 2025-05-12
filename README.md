@@ -1,3 +1,3 @@
 # OlympiaOyster-Genomics-Capstone
 
-#Project Description
+Project Description
