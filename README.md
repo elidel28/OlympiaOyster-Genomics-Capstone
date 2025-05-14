@@ -1,6 +1,6 @@
 # Olympia Oyster GTSeq Panel Pipeline
 
-Project Description:
+## Project Description:
 
 About the Data:
 
