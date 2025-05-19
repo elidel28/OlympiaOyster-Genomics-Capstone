@@ -1,10 +1,17 @@
 # Olympia Oyster GTSeq Panel Pipeline
 
 ## Project Description:
+The project aims to develop a genomic toolset and analysis pipeline to assess the genetic relatedness between farmed and wild Olympia oysters (*Ostrea lurida*) using a categorized panel of location-specific single nucleotide polymorphisms (SNPs) identified through GTseq. This project supports government efforts, such as by the California Department of Fish and Wildlife, in evaluating the suitability of farmed oysters for reintroduction by comparing their genetic diversity to that of various unique wild populations along the West Coast.
 
 ## About the Data:
+Data used for our pipline consisted of unsequenced genomic data from a larger data of 254 individuals across 14 locations on the West coast.
 
 ## Tools Needed:
+BWA_MEM: Align sequencing reads
+SamTools: Interacting with SAM/BAM 
+GATK HaplotypeCaller: Call germline SNPs and indels via local re-assembly of haplotypes
+BQSR: Adjust the quality scores of sequencing reads
+############
 
 ## Scipts Overview:
 
