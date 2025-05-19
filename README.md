@@ -7,11 +7,10 @@ The project aims to develop a genomic toolset and analysis pipeline to assess th
 Data used for our pipline consisted of unsequenced genomic data from a larger data of 254 individuals across 14 locations on the West coast.
 
 ## Tools Needed:
-BWA_MEM: Align sequencing reads
-SamTools: Interacting with SAM/BAM 
-GATK HaplotypeCaller: Call germline SNPs and indels via local re-assembly of haplotypes
-BQSR: Adjust the quality scores of sequencing reads
-############
+- BWA_MEM: Align sequencing reads
+- SamTools: Interacting with SAM/BAM 
+- GATK HaplotypeCaller: Call germline SNPs and indels via local re-assembly of haplotypes
+- BQSR: Adjust the quality scores of sequencing reads
 
 ## Scipts Overview:
 
