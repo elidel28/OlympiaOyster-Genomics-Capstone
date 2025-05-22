@@ -18,7 +18,7 @@ Data used for our pipeline consisted of raw genomic data from a larger dataset o
 
 ## Scripts Overview:
 
-**align_reads**: This script aligns paired-end FASTQ reads to a reference genome using BWA-MEM and generates SAM files for each sample.
+**Align_Reads**: This script aligns paired-end FASTQ reads to a reference genome using BWA-MEM and generates SAM files for each sample.
 
 Inputs: 
 - Reference genome FASTA file (.fasta)
@@ -27,7 +27,17 @@ Inputs:
 Outputs:
 - Sequence Alignment Map (SAM) files for each sample saved in the results/ directory (<sample>.sam)
 
-**BQSRscripts**: This script runs a GATK-based pipeline for base quality score recalibration (BQSR), variant calling, and filtering on multiple BAM files, producing final GVCF files for downstream analysis.
+**SAMtools_Script**: Converts SAM files to BAM (Binary Alignment Map) files, sorts the BAMs, and indexes them for further use in the pipeline.
+
+Inputs:
+- Sequence Alignment Map files (.sam)
+
+Outputs:
+- Binary Alignment Map files (.bam)
+- Sorted BAM files (.sorted.bam)
+- Sorted BAM Index files (.sorted.bam.bai)
+
+**VariantCallingScripts**: This script runs a GATK-based pipeline for initial variant calling, filtering unwanted reads, base quality score recalibration (BQSR), and producing final GVCF files for downstream analysis.
 
 Inputs: 
 - Sorted and read-group-added BAM files (.sorted.bam)
@@ -36,7 +46,7 @@ Inputs:
 - Sample file names list (defined in files list)
 
 Outputs: 
-- Indexed BAM files (.bam.bai)
+- Indexed BAM files (.bam.bai) (only indexed if indexes are not present from SAMtools_script)
 - Initial raw VCF (.raw.vcf)
 - Filtered VCF (.filtered.vcf)
 - Passing variants only VCF (.passonly.vcf)
