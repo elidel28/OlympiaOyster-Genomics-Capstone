@@ -9,12 +9,11 @@ Data used for our pipeline consisted of raw genomic data from a larger dataset o
 ## Tools Needed:
 - Burrows-Wheeler Aligner (BWA): Align sequencing reads from individual oyster samples to the Olympia oyster reference genome
 - SamTools: Interacting with SAM/BAM files
-- GATK HaplotypeCaller: Call germline SNPs and indels via local re-assembly of haplotypes
-- GATK VariantFiltration: 
-- GATK: SelectVariants: 
-- GATK BaseRecalibrator: 
-- GATK ApplyBQSR: 
-- Base Quality Score Recalibration (BQSR): Adjust the quality scores of sequencing reads
+- *GATK*: HaplotypeCaller: Call germline SNPs and indels via local re-assembly of haplotypes
+- *GATK*: VariantFiltration: Hard filter variant calls based on given criteria and label failed calls
+- *GATK*: SelectVariants: Generate a vcf file with all the failed calls removed
+- *GATK*: BaseRecalibrator: Generates recalibration table for Base Quality Score Recalibration (BQSR)
+- *GATK*: ApplyBQSR: applies recalibration table to adjust the quality scores of sequencing reads
 
 ## Scripts Overview:
 
@@ -27,6 +26,7 @@ Inputs:
 Outputs:
 - Sequence Alignment Map (SAM) files for each sample saved in the results/ directory (<sample>.sam)
 
+
 **SAMtools_Script**: Converts SAM files to BAM (Binary Alignment Map) files, sorts the BAMs, and indexes them for further use in the pipeline.
 
 Inputs:
@@ -36,6 +36,7 @@ Outputs:
 - Binary Alignment Map files (.bam)
 - Sorted BAM files (.sorted.bam)
 - Sorted BAM Index files (.sorted.bam.bai)
+
 
 **VariantCallingScripts**: This script runs a GATK-based pipeline for initial variant calling, filtering unwanted reads, base quality score recalibration (BQSR), and producing final GVCF files for downstream analysis.
 
