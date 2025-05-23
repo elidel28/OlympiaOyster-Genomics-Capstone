@@ -17,7 +17,7 @@ Data used for our pipeline consisted of raw genomic data from a larger dataset o
 
 ## Scripts Overview:
 
-**Align_Reads**: This script aligns paired-end FASTQ reads to a reference genome using BWA-MEM and generates SAM files for each sample.
+### Align_Reads: This script aligns paired-end FASTQ reads to a reference genome using BWA-MEM and generates SAM files for each sample.
 
 Inputs: 
 - Reference genome FASTA file (.fasta)
@@ -27,7 +27,7 @@ Outputs:
 - Sequence Alignment Map (SAM) files for each sample saved in the results/ directory (<sample>.sam)
 
 
-**SAMtools_Script**: Converts SAM files to BAM (Binary Alignment Map) files, sorts the BAMs, and indexes them for further use in the pipeline.
+### SAMtools_Script: Converts SAM files to BAM (Binary Alignment Map) files, sorts the BAMs, and indexes them for further use in the pipeline.
 
 Inputs:
 - Sequence Alignment Map files (.sam)
@@ -38,7 +38,7 @@ Outputs:
 - Sorted BAM Index files (.sorted.bam.bai)
 
 
-**VariantCallingScripts**: This script runs a GATK-based pipeline for initial variant calling, filtering unwanted reads, base quality score recalibration (BQSR), and producing final GVCF files for downstream analysis.
+### VariantCallingScripts: This script runs a GATK-based pipeline for initial variant calling, filtering unwanted reads, base quality score recalibration (BQSR), and producing final GVCF files for downstream analysis.
 
 Inputs: 
 - Sorted and read-group-added BAM files (.sorted.bam)
