@@ -16,9 +16,9 @@ Data used for our pipeline consisted of raw genomic data from a larger dataset o
 - *GATK*: ApplyBQSR: applies recalibration table to adjust the quality scores of sequencing reads
 - *GATK*: CombineGVCFs: Merge individual gVCFs to single multi-sample gVFC
 - *GATK*: GenotypeGVCFs: Joint genotyping on combined gVCF to produce a fully genotyped multi-sample VCF
-- Plink:
-- bcftools:
-- bedtools:
+- Plink: SNP-level filtering, linkage disequilibrium pruning, and population based quality control
+- bcftools: VCF file operations (annotating, filtering, format conversion)
+- bedtools: Genomiv interval operations to great targeted genomics regions and count SNPs per region
 
 ## Scripts Overview:
 
