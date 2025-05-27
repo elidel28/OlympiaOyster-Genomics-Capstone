@@ -95,3 +95,62 @@ Output: <sample>.recalibrated.bam
 Step 7: Final Variant Calling (GVCF mode)
 Input: <sample>.recalibrated.bam, reference
 Output: <sample>.final.g.vcf
+
+
+### combine_gvcfs:
+Checks for, and indexes per-sample GVCF files generated after BQSR and final variant calling. Once all GVCFs are confirmed and indexed, it combines them into a single multi-sample GVCF using GATK’s CombineGVCFs, in preparation for joint genotyping.
+
+Inputs:
+- Final per-sample GVCF files (<sample>.final.g.vcf)
+- Reference genome FASTA file (.fasta)
+
+Outputs:
+- Combined multi-sample GVCF (cohort_combined.g.vcf)
+- Indexed .idx files for each input GVCF
+
+### joint_genotyping_select_snps:
+Performs joint genotyping on a combined multi-sample GVCF using GATK’s GenotypeGVCFs, then extracts only SNPs from the resulting VCF using SelectVariants. It is a core step in transitioning from raw variant discovery to marker selection.
+
+Inputs:
+- Combined GVCF file (cohort_combined.g.vcf)
+- Reference genome FASTA file (.fasta)
+
+Outputs:
+- Joint-genotyped VCF (cohort_genotyped.vcf)
+- SNP-only VCF (cohort_snps.vcf)
+
+### plink_filtering_pipeline:
+Performs SNP-level filtering using PLINK. It converts a SNP-only VCF into PLINK format, calculates minor allele frequency (MAF) and missingness statistics, filters variants based on quality thresholds, and outputs a high-confidence VCF file for downstream analysis or GT-seq panel selection.
+
+Inputs:
+- SNP-only VCF file (cohort_snps.vcf)
+
+Outputs:
+- PLINK binary files (.bed, .bim, .fam)
+- Summary statistics (.frq, .imiss, .lmiss)
+- Filtered PLINK binary dataset
+- Final filtered VCF (cohort_filtered_snps.vcf)
+
+Step-by-Step Overview:
+
+Step 1: Convert VCF to PLINK Format (Translates VCF into PLINK binary format for efficient processing)
+
+Input: cohort_snps.vcf
+Output: cohort_plink.bed/.bim/.fam
+
+Step 2: Compute SNP Statistics (Calculates MAF and per-site/per-sample missingness)
+
+Input: PLINK files from step 1
+Output: cohort_stats.frq, .imiss, .lmiss
+
+Step 3: Filter SNPs (Removes SNPs with MAF < 0.1 or missingness > 5%)
+
+Input: PLINK files from step 1
+Output: cohort_filtered.bed/.bim/.fam
+
+
+Step 4: Export Filtered SNPs to VCF (Converts final filtered dataset back to VCF format)
+
+Input: Filtered PLINK files
+Output: cohort_filtered_snps.vcf
+
