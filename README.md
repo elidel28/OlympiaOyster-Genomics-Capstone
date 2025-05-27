@@ -22,18 +22,21 @@ Data used for our pipeline consisted of raw genomic data from a larger dataset o
 
 ## Scripts Overview:
 
-### Align_Reads: 
-  This script aligns paired-end FASTQ reads to a reference genome using BWA-MEM and generates SAM files for each sample.
+### align_reads_with_RG: 
+This script aligns paired-end FASTQ reads to a reference genome using BWA-MEM, automatically extracts read group (@RG) information from each R1 file, and generates SAM files for each sample.
 
-Inputs: 
+Inputs:
 - Reference genome FASTA file (.fasta)
-- Paired-end FASTQ files (R1 and R2 for each sample)
+- Paired-end FASTQ files (R1 and R2) for each sample (gzipped)
+- Output directory path
+- Path to bwa executable
+- Genome-specific thread count (user-defined)
 
 Outputs:
-- Sequence Alignment Map (SAM) files for each sample saved in the results/ directory (<sample>.sam)
+- SAM files for each sample saved in the output directory (<sample>_test.sam)
 
 
-### SAMtools_Script: 
+### sam_to_sorted_bam: 
   Converts SAM files to BAM (Binary Alignment Map) files, sorts the BAMs, and indexes them for further use in the pipeline.
 
 Inputs:
@@ -45,7 +48,7 @@ Outputs:
 - Sorted BAM Index files (.sorted.bam.bai)
 
 
-### VariantCallingScripts: 
+### variant_calling_bqsr: 
   This script runs a GATK-based pipeline for initial variant calling, filtering unwanted reads, base quality score recalibration (BQSR), and producing final GVCF files for downstream analysis.
 
 Inputs: 
@@ -62,3 +65,33 @@ Outputs:
 - Recalibration table (.recal.table)
 - Recalibrated BAM file (.recalibrated.bam)
 - Final GVCF file (.final.g.vcf) — used for joint genotyping
+
+Step-by-Step Overview:
+
+Step 1: Index BAM
+Input: <sample>.sorted.bam
+Output: <sample>.sorted.bam.bai
+
+Step 2: Initial Variant Calling
+Input: <sample>.sorted.bam, reference
+Output: <sample>.raw.vcf
+
+Step 3: Hard Filtering of Variants
+Input: <sample>.raw.vcf
+Output: <sample>.filtered.vcf
+
+Step 4: Select Passing Variants
+Input: <sample>.filtered.vcf
+Output: <sample>.passonly.vcf
+
+Step 5: Base Recalibration (BQSR Table)
+Input: <sample>.sorted.bam, <sample>.passonly.vcf, reference
+Output: <sample>.recal.table
+
+Step 6: Apply BQSR
+Input: <sample>.sorted.bam, recal table
+Output: <sample>.recalibrated.bam
+
+Step 7: Final Variant Calling (GVCF mode)
+Input: <sample>.recalibrated.bam, reference
+Output: <sample>.final.g.vcf
