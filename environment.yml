@@ -1,0 +1,23 @@
+name: olympia-pipeline
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.10
+  - bwa
+  - samtools
+  - bcftools
+  - bedtools
+  - gatk4
+  - plink
+  - pandas
+  - pyyaml
+  - pip
+  - pip:
+      - jupyterlab
+
+
+# To create and activate this environment, run the following commands:
+#   conda env create -f environment.yml
+#   conda activate olympia-pipeline
