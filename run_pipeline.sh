@@ -12,16 +12,13 @@ python scripts/sam_to_sorted_bam.py
 echo "========== STEP 3: Run Variant Calling and BQSR =========="
 python scripts/variant_calling_bqsr.py
 
-echo "========== STEP 4: SNP Annotation and Filtering =========="
-python scripts/BQSR_snp_annotation_and_filtering.py
-
-echo "========== STEP 5: Combine GVCFs =========="
+echo "========== STEP 4: Combine GVCFs =========="
 python scripts/combine_gvcfs.py
 
-echo "========== STEP 6: Joint Genotyping and SNP Selection =========="
+echo "========== STEP 5: Joint Genotyping and SNP Selection =========="
 python scripts/joint_genotyping_select_snps.py
 
-echo "========== STEP 7: PLINK SNP Filtering =========="
+echo "========== STEP 6: PLINK SNP Filtering =========="
 python scripts/plink_filtering_pipeline.py
 
 echo "========== PIPELINE COMPLETE =========="
