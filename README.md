@@ -14,6 +14,11 @@ Data used for our pipeline consisted of raw genomic data from a larger dataset o
 - *GATK*: SelectVariants: Generate a vcf file with all the failed calls removed
 - *GATK*: BaseRecalibrator: Generates recalibration table for Base Quality Score Recalibration (BQSR)
 - *GATK*: ApplyBQSR: applies recalibration table to adjust the quality scores of sequencing reads
+- *GATK*: CombineGVCFs: Merge individual gVCFs to single multi-sample gVFC
+- *GATK*: GenotypeGVCFs: Joint genotyping on combined gVCF to produce a fully genotyped multi-sample VCF
+- Plink:
+- bcftools:
+- bedtools:
 
 ## Scripts Overview:
 
