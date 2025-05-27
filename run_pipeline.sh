@@ -21,7 +21,7 @@ python scripts/joint_genotyping_select_snps.py
 echo "========== STEP 6: PLINK SNP Filtering =========="
 python scripts/plink_filtering_pipeline.py
 
-echo "========== STEP 7: SNP Annotation and BED Processing =========="
-python scripts/snp_annotation_and_filtering.py
+echo "========== STEP 7: SNP Annotation and Filtering =========="
+python scripts/BQSR_snp_annotation_and_filtering.py
 
 echo "========== PIPELINE COMPLETE =========="
