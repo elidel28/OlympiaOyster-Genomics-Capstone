@@ -1,0 +1,83 @@
+# === Reference and Data Paths ===
+
+# Path to the reference genome FASTA file
+# Edit this to point to your reference genome
+reference: data/reference/genome.fasta
+
+# Path to the genome size file (used by bedtools)
+# Should be a 2-column file: chromosome name and length
+genome_file: data/reference/genome.txt
+
+# Directory containing your gzipped FASTQ files
+# Ensure FASTQ filenames match what's listed in config/samples.tsv
+fastq_dir: data/fastq/
+
+# Directory containing sorted BAM files (output of samtools sort)
+# You likely do not need to change this unless you reorganize your output structure
+sorted_bam_dir: results/bam/sorted/
+
+# Directory for unsorted BAM files (optional, used between sam and sort)
+bam_dir: results/bam/
+
+# Directory for SAM files (output from BWA)
+sam_dir: results/sam/
+
+# Output directory for all intermediate and final files
+# Can remain default unless you want to customize where outputs go
+output_dir: results/bqsr/
+
+# Directory where PLINK outputs will be saved
+# You may change this if organizing downstream results separately
+plink_dir: results/bqsr/plink_analysis/
+
+
+# === GATK and Tool Settings ===
+
+# Path to the GATK executable (as installed with envrionment.yml)
+gatk_path: gatk
+
+# Path to the BWA executable (as installed with envrionment.yml)
+bwa_path: bwa
+
+# Number of threads to use for multi-threaded tools (BWA, GATK, samtools)
+# Adjust based on the number of CPUs available on your machine
+threads: 10
+
+# Amount of memory to allocate to GATK steps (e.g. BaseRecalibrator)
+gatk_mem: 16g
+
+# Amount of memory per thread for samtools sort
+samtools_ram: 1g
+
+
+# === Sample Metadata ===
+
+# Path to a tab-delimited file listing sample IDs and matching FASTQ filenames
+# Required for BWA alignment and any fastq-based step
+sample_sheet: config/samples.csv
+
+# List of sample IDs used across all steps
+# These should match prefixes in your FASTQ, BAM, and VCF filenames
+# Edit this list to include your own sample IDs (from sample.csv)
+# samples:
+#  - 
+
+
+# === Intermediate and Final VCF Files ===
+# These files are used across multiple steps and should be left as-is
+# unless you change the naming scheme or output structure
+
+combined_gvcf: results/bqsr/cohort_combined.g.vcf
+joint_vcf: results/bqsr/cohort_genotyped.vcf
+snps_vcf: results/bqsr/cohort_snps.vcf
+maf_filtered_vcf: results/bqsr/cohort.selected_snps.vcf
+
+
+# === PLINK Output Prefixes ===
+# Prefixes used for naming intermediate PLINK output files
+# These should remain consistent unless customizing file locations
+
+plink_prefix: results/bqsr/plink_analysis/cohort_plink
+stats_prefix: results/bqsr/plink_analysis/cohort_stats
+filtered_prefix: results/bqsr/plink_analysis/cohort_filtered
+final_vcf_prefix: results/bqsr/plink_analysis/cohort_filtered_snps
