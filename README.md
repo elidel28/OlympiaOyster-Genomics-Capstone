@@ -64,13 +64,6 @@ OlympiaOyster-Genomics-Capstone/
 * Defines paths for input/output directories, reference genome, and tools.
 * Set `reference` and `fastq_dir` to where your files are stored.
 
-Example:
-
-```yaml
-reference: johnsonlab_data/Final_assembly_Olympia/your_reference.fasta
-fastq_dir: johnsonlab_data/lcwg_Olympia/
-```
-
 ### `samples.csv`
 
 * List your sample IDs and FASTQ filenames:
