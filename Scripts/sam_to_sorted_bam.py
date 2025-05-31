@@ -10,11 +10,23 @@ Steps:
 import os
 import subprocess
 import yaml
+import csv
 
 
 def load_config(config_path="config/config.yaml"):
     with open(config_path, "r") as f:
         return yaml.safe_load(f)
+
+
+def read_sample_sheet(sample_sheet_path):
+    samples = []
+    with open(sample_sheet_path, newline='') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            samples.append({
+                "sample_id": row["sample_id"]
+            })
+    return samples
 
 
 def sam_to_bam(sam_path, bam_path):
@@ -57,8 +69,9 @@ def process_sample(sample_id, config):
 
 def main():
     config = load_config()
-    for sample_id in config["samples"]:
-        process_sample(sample_id, config)
+    samples = read_sample_sheet(config["sample_sheet"])
+    for sample in samples:
+        process_sample(sample["sample_id"], config)
 
 
 if __name__ == "__main__":

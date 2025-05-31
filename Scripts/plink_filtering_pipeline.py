@@ -59,14 +59,17 @@ def run_plink_export_to_vcf(filtered_prefix, vcf_output_prefix):
 
 def main():
     config = load_config()
-    vcf_input = config["snps_vcf"]
-    work_dir = config["plink_dir"]
-    os.makedirs(work_dir, exist_ok=True)
 
-    plink_prefix = os.path.join(work_dir, "cohort_plink")
-    stats_prefix = os.path.join(work_dir, "cohort_stats")
-    filtered_prefix = os.path.join(work_dir, "cohort_filtered")
-    final_vcf_prefix = os.path.join(work_dir, "cohort_filtered_snps")
+    genotyped_dir = config["genotyped_dir"]
+    plink_dir = config["plink_dir"]
+    os.makedirs(plink_dir, exist_ok=True)
+
+    vcf_input = os.path.join(genotyped_dir, "cohort_snps.vcf")
+
+    plink_prefix = os.path.join(plink_dir, "cohort_plink")
+    stats_prefix = os.path.join(plink_dir, "cohort_stats")
+    filtered_prefix = os.path.join(plink_dir, "cohort_filtered")
+    final_vcf_prefix = os.path.join(plink_dir, "cohort_filtered_snps")
 
     run_plink_conversion(vcf_input, plink_prefix)
     run_plink_stats(plink_prefix, stats_prefix)

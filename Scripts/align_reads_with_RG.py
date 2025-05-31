@@ -57,7 +57,7 @@ def align_sample(sample, config):
     r1_path = os.path.join(config["fastq_dir"], sample["forward_read"])
     r2_path = os.path.join(config["fastq_dir"], sample["reverse_read"])
     sample_id = sample["sample_id"]
-    output_dir = config["output_dir"]
+    output_dir = config["sam_dir"]
     ref = config["reference"]
     threads = str(config["threads"])
     bwa_path = config["bwa_path"]

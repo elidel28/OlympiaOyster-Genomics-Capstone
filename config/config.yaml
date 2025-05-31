@@ -1,16 +1,16 @@
 # === Reference and Data Paths ===
 
 # Path to the reference genome FASTA file
-# Edit this to point to your reference genome
-reference: data/reference/genome.fasta
+# TODO: Replace this with the full path to your reference genome FASTA file (.fasta)
+reference: /path/to/your/reference.fasta
 
 # Path to the genome size file (used by bedtools)
 # Should be a 2-column file: chromosome name and length
 genome_file: data/reference/genome.txt
 
-# Directory containing your gzipped FASTQ files
-# Ensure FASTQ filenames match what's listed in config/samples.tsv
-fastq_dir: data/fastq/
+# TODO: Replace this with the directory containing your gzipped FASTQ files
+# Each sample's FASTQ file names must match those listed in config/samples.csv
+fastq_dir: /path/to/your/fastq_directory/
 
 # Directory containing sorted BAM files (output of samtools sort)
 # You likely do not need to change this unless you reorganize your output structure
@@ -28,8 +28,13 @@ output_dir: results/bqsr/
 
 # Directory where PLINK outputs will be saved
 # You may change this if organizing downstream results separately
-plink_dir: results/bqsr/plink_analysis/
+plink_dir: results/plink_analysis/
 
+combined_gvcf_dir: results/combined/
+gvcf_dir: results/gvcfs/
+variant_dir: results/variants/
+recal_dir: results/recalibration/
+genotyped_dir: results/genotyped/
 
 # === GATK and Tool Settings ===
 
@@ -44,7 +49,7 @@ bwa_path: bwa
 threads: 10
 
 # Amount of memory to allocate to GATK steps (e.g. BaseRecalibrator)
-gatk_mem: 16g
+gatk_mem: 8g
 
 # Amount of memory per thread for samtools sort
 samtools_ram: 1g
@@ -55,12 +60,6 @@ samtools_ram: 1g
 # Path to a tab-delimited file listing sample IDs and matching FASTQ filenames
 # Required for BWA alignment and any fastq-based step
 sample_sheet: config/samples.csv
-
-# List of sample IDs used across all steps
-# These should match prefixes in your FASTQ, BAM, and VCF filenames
-# Edit this list to include your own sample IDs (from sample.csv)
-# samples:
-#  - 
 
 
 # === Intermediate and Final VCF Files ===
