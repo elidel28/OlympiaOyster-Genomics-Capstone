@@ -20,6 +20,148 @@ Data used for our pipeline consisted of raw genomic data from a larger dataset o
 - bcftools: VCF file operations (annotating, filtering, format conversion)
 - bedtools: Genomiv interval operations to great targeted genomics regions and count SNPs per region
 
+---
+
+## Repository Structure
+
+```
+OlympiaOyster-Genomics-Capstone/
+├── config/                 # Pipeline configuration and sample metadata
+│   ├── config.yaml
+│   └── samples.csv
+│
+├── results/                # All pipeline outputs organized by step
+│   ├── sam/                # SAM files from BWA
+│   ├── bam/                # BAM files
+│   ├── bam/sorted/         # Sorted and indexed BAMs
+│   ├── variants/           # Raw + filtered VCFs
+│   ├── recalibration/      # BQSR tables and recalibrated BAMs
+│   ├── gvcfs/              # Per-sample GVCFs
+│   ├── combined/           # Combined GVCF for joint calling
+│   ├── genotyped/          # Joint-genotyped VCFs and SNPs
+│   └── plink_analysis/     # Filtered SNPs and PLINK outputs
+│
+├── scripts/                # Individual pipeline steps
+│   ├── align_reads_with_RG.py
+│   ├── sam_to_sorted_bam.py
+│   ├── variant_calling_bqsr.py
+│   ├── combine_gvcfs.py
+│   ├── joint_genotyping_select_snps.py
+│   ├── plink_filtering_pipeline.py
+│   └── snp_annotation_and_filtering.py
+│
+├── environment.yml         # Conda environment file
+├── run_pipeline.sh         # One-command pipeline runner
+└── README.md               # You're reading it!
+```
+
+---
+
+## Configuration
+
+### `config.yaml`
+
+* Defines paths for input/output directories, reference genome, and tools.
+* Set `reference` and `fastq_dir` to where your files are stored.
+
+Example:
+
+```yaml
+reference: johnsonlab_data/Final_assembly_Olympia/your_reference.fasta
+fastq_dir: johnsonlab_data/lcwg_Olympia/
+```
+
+### `samples.csv`
+
+* List your sample IDs and FASTQ filenames:
+
+```csv
+sample_id,forward_read,reverse_read
+10KP,10KP_R1.fastq.gz,10KP_R2.fastq.gz
+14KP,14KP_R1.fastq.gz,14KP_R2.fastq.gz
+```
+
+---
+
+## Getting Started
+
+### Step 1: Clone the Repository
+
+```bash
+git clone https://github.com/elidel28/OlympiaOyster-Genomics-Capstone.git
+cd OlympiaOyster-Genomics-Capstone
+```
+
+### Step 2: Create the Conda Environment
+
+```bash
+conda env create -f environment.yml
+conda activate olympia-pipeline
+```
+
+### Step 3: Set Up Data Paths
+
+* Create a symlink to your data folder:
+
+```bash
+ln -s /mnt/jupiter/johnsonlab johnsonlab_data
+```
+
+* Update `config.yaml`:
+
+```yaml
+reference: johnsonlab_data/Final_assembly_Olympia/your_reference.fasta
+fastq_dir: johnsonlab_data/lcwg_Olympia/
+```
+
+### Step 4: Configure Samples
+
+Edit `config/samples.csv` to list all samples and their FASTQ files names.
+
+---
+
+## Run the Pipeline
+
+### Preferred:
+
+```bash
+bash run_pipeline.sh
+```
+
+### Manual (step-by-step):
+
+```bash
+# Clean BOM if needed
+sed -i '1s/^\xEF\xBB\xBF//' config/samples.csv
+
+# Generate index files required for BWA MEM
+bwa index your_reference.fasta
+
+# Run each step
+python scripts/align_reads_with_RG.py
+python scripts/sam_to_sorted_bam.py
+python scripts/variant_calling_bqsr.py
+python scripts/combine_gvcfs.py
+python scripts/joint_genotyping_select_snps.py
+python scripts/plink_filtering_pipeline.py
+```
+
+---
+
+## What Each Script Does
+
+| Script                            | Reads From                    | Writes To                       |
+| --------------------------------- | ----------------------------- | ------------------------------- |
+| `align_reads_with_RG.py`          | `fastq_dir`, `samples.csv`    | `sam_dir`                       |
+| `sam_to_sorted_bam.py`            | `sam_dir`                     | `bam_dir`, `sorted_bam_dir`     |
+| `variant_calling_bqsr.py`         | `sorted_bam_dir`, `reference` | `variants/`, `recal/`, `gvcfs/` |
+| `combine_gvcfs.py`                | `gvcfs/`, `reference`         | `combined/`                     |
+| `joint_genotyping_select_snps.py` | `combined/`, `reference`      | `genotyped/`                    |
+| `plink_filtering_pipeline.py`     | `genotyped/`                  | `plink_analysis/`               |
+
+---
+
+
 ## Scripts Overview:
 
 ### align_reads_with_RG: 
