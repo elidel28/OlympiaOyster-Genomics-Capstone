@@ -271,8 +271,36 @@ Input: cohort_filtered.bim
 Output: cohort_filtered.snps.bed
 
 
+### primer3_gtseq_design.py
 
+This script performs primer design for GT-seq panel development using Primer3. It converts SNP-flanking sequences from FASTA format into Primer3  compatible input, runs Primer3 to generate primers, and parses the output into a clean CSV for downstream primer selection or synthesis.
 
+#### Inputs:
+- FASTA file with ~100 bp SNP-flanking sequences (cohort_snps_100bp.fa)
+#### Outputs:
+- Primer3 input file (input.pr3)
+- Raw Primer3 output (output.txt)
+- Final GT-seq-compatible CSV file (gtseq_panel.csv) containing:
+    - SNP ID
+    - Forward primer
+    - Reverse primer
+    - Amplicon size
+
+#### Step-by-Step Overview:
+Step 1: Convert FASTA to Primer3 Input Format - Parses each FASTA entry into a structured input block for Primer3
+
+Input: cohort_snps_100bp.fa
+Output: input.pr3
+
+Step 2: Run Primer3 - Calls Primer3 with the input file and writes raw output
+
+Input: input.pr3
+Output: output.txt
+
+Step 3: Parse Primer3 Output - Extracts valid primer pairs and writes them to CSV
+
+Input: output.txt
+Output: gtseq_panel.csv
 
 
 
