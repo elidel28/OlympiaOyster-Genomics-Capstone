@@ -139,9 +139,7 @@ python scripts/joint_genotyping_select_snps.py
 python scripts/plink_filtering_pipeline.py
 ```
 
----
-
-## What Each Script Does
+## Scripts Overview:
 
 | Script                            | Reads From                    | Writes To                       |
 | --------------------------------- | ----------------------------- | ------------------------------- |
@@ -151,11 +149,6 @@ python scripts/plink_filtering_pipeline.py
 | `combine_gvcfs.py`                | `gvcfs/`, `reference`         | `combined/`                     |
 | `joint_genotyping_select_snps.py` | `combined/`, `reference`      | `genotyped/`                    |
 | `plink_filtering_pipeline.py`     | `genotyped/`                  | `plink_analysis/`               |
-
----
-
-
-## Scripts Overview:
 
 ### align_reads_with_RG: 
 This script aligns paired-end FASTQ reads to a reference genome using BWA-MEM, automatically extracts read group (@RG) information from each R1 file, and generates SAM files for each sample.
