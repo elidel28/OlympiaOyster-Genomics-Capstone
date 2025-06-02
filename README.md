@@ -52,7 +52,7 @@ OlympiaOyster-Genomics-Capstone/
 │
 ├── environment.yml         # Conda environment file
 ├── run_pipeline.sh         # One-command pipeline runner
-└── README.md               # You're reading it!
+└── README.md             
 ```
 
 ---
@@ -168,7 +168,7 @@ Inputs:
 - Genome-specific thread count (user-defined)
 
 Outputs:
-- SAM files for each sample saved in the output directory (<sample>_test.sam)
+- SAM files for each sample saved in the output directory
 
 
 ### sam_to_sorted_bam: 
@@ -190,7 +190,7 @@ Inputs:
 - Sorted and read-group-added BAM files (.sorted.bam)
 - Reference genome FASTA (.fasta)
 - Known variant set for BQSR (generated from initial variant calls)
-- Sample file names list (defined in files list)
+- Sample file names list
 
 Outputs: 
 - Indexed BAM files (.bam.bai) (only indexed if indexes are not present from SAMtools_script)
@@ -200,37 +200,6 @@ Outputs:
 - Recalibration table (.recal.table)
 - Recalibrated BAM file (.recalibrated.bam)
 - Final GVCF file (.final.g.vcf) — used for joint genotyping
-
-Step-by-Step Overview:
-
-Step 1: Index BAM
-Input: <sample>.sorted.bam
-Output: <sample>.sorted.bam.bai
-
-Step 2: Initial Variant Calling
-Input: <sample>.sorted.bam, reference
-Output: <sample>.raw.vcf
-
-Step 3: Hard Filtering of Variants
-Input: <sample>.raw.vcf
-Output: <sample>.filtered.vcf
-
-Step 4: Select Passing Variants
-Input: <sample>.filtered.vcf
-Output: <sample>.passonly.vcf
-
-Step 5: Base Recalibration (BQSR Table)
-Input: <sample>.sorted.bam, <sample>.passonly.vcf, reference
-Output: <sample>.recal.table
-
-Step 6: Apply BQSR
-Input: <sample>.sorted.bam, recal table
-Output: <sample>.recalibrated.bam
-
-Step 7: Final Variant Calling (GVCF mode)
-Input: <sample>.recalibrated.bam, reference
-Output: <sample>.final.g.vcf
-
 
 ### combine_gvcfs:
 Checks for, and indexes per-sample GVCF files generated after BQSR and final variant calling. Once all GVCFs are confirmed and indexed, it combines them into a single multi-sample GVCF using GATK’s CombineGVCFs, in preparation for joint genotyping.
