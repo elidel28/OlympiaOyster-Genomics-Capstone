@@ -231,7 +231,7 @@ Outputs:
 
 Step-by-Step Overview:
 
-Step 1: Convert VCF to PLINK Format (Translates VCF into PLINK binary format for efficient processing)
+#### Step 1: Convert VCF to PLINK Format (Translates VCF into PLINK binary format for efficient processing)
 
 Input: cohort_snps.vcf
 Output: cohort_plink.bed/.bim/.fam
