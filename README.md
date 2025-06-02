@@ -153,24 +153,24 @@ python scripts/plink_filtering_pipeline.py
 ### align_reads_with_RG: 
 This script aligns paired-end FASTQ reads to a reference genome using BWA-MEM, automatically extracts read group (@RG) information from each R1 file, and generates SAM files for each sample.
 
-Inputs:
+#### Inputs:
 - Reference genome FASTA file (.fasta)
 - Paired-end FASTQ files (R1 and R2) for each sample (gzipped)
 - Output directory path
 - Path to bwa executable
 - Genome-specific thread count (user-defined)
 
-Outputs:
+#### Outputs:
 - SAM files for each sample saved in the output directory
 
 
 ### sam_to_sorted_bam: 
   Converts SAM files to BAM (Binary Alignment Map) files, sorts the BAMs, and indexes them for further use in the pipeline.
 
-Inputs:
+#### Inputs:
 - Sequence Alignment Map files (.sam)
 
-Outputs:
+#### Outputs:
 - Binary Alignment Map files (.bam)
 - Sorted BAM files (.sorted.bam)
 - Sorted BAM Index files (.sorted.bam.bai)
@@ -179,13 +179,13 @@ Outputs:
 ### variant_calling_bqsr: 
   This script runs a GATK-based pipeline for initial variant calling, filtering unwanted reads, base quality score recalibration (BQSR), and producing final GVCF files for downstream analysis.
 
-Inputs: 
+#### Inputs:
 - Sorted and read-group-added BAM files (.sorted.bam)
 - Reference genome FASTA (.fasta)
 - Known variant set for BQSR (generated from initial variant calls)
 - Sample file names list
 
-Outputs: 
+#### Outputs:
 - Indexed BAM files (.bam.bai) (only indexed if indexes are not present from SAMtools_script)
 - Initial raw VCF (.raw.vcf)
 - Filtered VCF (.filtered.vcf)
@@ -197,41 +197,41 @@ Outputs:
 ### combine_gvcfs:
 Checks for, and indexes per-sample GVCF files generated after BQSR and final variant calling. Once all GVCFs are confirmed and indexed, it combines them into a single multi-sample GVCF using GATK’s CombineGVCFs, in preparation for joint genotyping.
 
-Inputs:
+#### Inputs:
 - Final per-sample GVCF files (<sample>.final.g.vcf)
 - Reference genome FASTA file (.fasta)
 
-Outputs:
+#### Outputs:
 - Combined multi-sample GVCF (cohort_combined.g.vcf)
 - Indexed .idx files for each input GVCF
 
 ### joint_genotyping_select_snps:
 Performs joint genotyping on a combined multi-sample GVCF using GATK’s GenotypeGVCFs, then extracts only SNPs from the resulting VCF using SelectVariants. It is a core step in transitioning from raw variant discovery to marker selection.
 
-Inputs:
+#### Inputs:
 - Combined GVCF file (cohort_combined.g.vcf)
 - Reference genome FASTA file (.fasta)
 
-Outputs:
+#### Outputs:
 - Joint-genotyped VCF (cohort_genotyped.vcf)
 - SNP-only VCF (cohort_snps.vcf)
 
 ### plink_filtering_pipeline:
 Performs SNP-level filtering using PLINK. It converts a SNP-only VCF into PLINK format, calculates minor allele frequency (MAF) and missingness statistics, filters variants based on quality thresholds, and outputs a high-confidence VCF file for downstream analysis or GT-seq panel selection.
 
-Inputs:
+#### Inputs:
 - SNP-only VCF file (cohort_snps.vcf)
 
-Outputs:
+#### Outputs:
 - PLINK binary files (.bed, .bim, .fam)
 - Summary statistics (.frq, .imiss, .lmiss)
 - Filtered PLINK binary dataset
 - Final filtered VCF (cohort_filtered_snps.vcf)
 - BED file with genomic coordinates of final SNPs
 
-Step-by-Step Overview:
+#### Step-by-Step Overview:
 
-#### Step 1: Convert VCF to PLINK Format (Translates VCF into PLINK binary format for efficient processing)
+Step 1: Convert VCF to PLINK Format (Translates VCF into PLINK binary format for efficient processing)
 
 Input: cohort_snps.vcf
 Output: cohort_plink.bed/.bim/.fam
