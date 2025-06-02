@@ -227,6 +227,7 @@ Outputs:
 - Summary statistics (.frq, .imiss, .lmiss)
 - Filtered PLINK binary dataset
 - Final filtered VCF (cohort_filtered_snps.vcf)
+- BED file with genomic coordinates of final SNPs
 
 Step-by-Step Overview:
 
@@ -246,8 +247,43 @@ Input: PLINK files from step 1
 Output: cohort_filtered.bed/.bim/.fam
 
 
-Step 4: Export Filtered SNPs to VCF (Converts final filtered dataset back to VCF format)
+Step 4: LD Pruning - Identify/removes SNPs in strong linkage disequilibrium (R^2 > 0.2)
 
-Input: Filtered PLINK files
+Input: Filtered PLINK dataset
+Output: cohort_prune.prune.in
+
+
+Step 5: Renives duplicate entries frm the LD pune list for error handling
+
+Input: cohort_prune.prune.in
+Output: cohort_prune.prune.in.dedup
+
+
+Step 6: SNP selection and exports to VCF
+
+Input: Deduplicated SNP list and filtered PLINK dataset
 Output: cohort_filtered_snps.vcf
+
+
+Step 7: Generate BED file of SNP coordinates
+
+Input: cohort_filtered.bim
+Output: cohort_filtered.snps.bed
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
