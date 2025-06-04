@@ -19,6 +19,7 @@ Data used for our pipeline consisted of raw genomic data from a larger dataset o
 - Plink: SNP-level filtering, linkage disequilibrium pruning, and population based quality control
 - bcftools: VCF file operations (annotating, filtering, format conversion)
 - bedtools: Genomiv interval operations to great targeted genomics regions and count SNPs per region
+- Primer3: 
 
 ---
 
