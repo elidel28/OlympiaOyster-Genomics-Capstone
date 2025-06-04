@@ -1,19 +1,32 @@
 """
-GTseq Primer Design Pipeline using Primer3
+GTseq Primer Design Script Using Primer3
 
-This script performs:
-1. Converts SNP-flanking FASTA sequences to Primer3 input format
+This script performs three core tasks:
+1. Converts SNP-centered FASTA sequences to Primer3 input format
 2. Runs Primer3 to design primers
 3. Parses Primer3 output and writes a GTseq-compatible CSV file
+
+Each FASTA entry should be ~100 bp, centered on a SNP of interest.
 """
 
 import os
-import subprocess
 import csv
+import subprocess
+
+# === CONFIGURATION ===
+INPUT_FASTA = "results/gtseq_design/cohort_snps_100bp.fa"
+OUTPUT_DIR = "results/gtseq_design"
+PRIMER3_INPUT = os.path.join(OUTPUT_DIR, "input.pr3")
+PRIMER3_OUTPUT = os.path.join(OUTPUT_DIR, "output.txt")
+GTSEQ_CSV = os.path.join(OUTPUT_DIR, "gtseq_panel.csv")
+
 
 def fasta_to_primer3_input(fasta_path, output_path):
-
-    def write_primer3_block(seq_id, sequence, out):
+    """
+    Convert SNP-centered FASTA entries to Primer3 input format.
+    Each entry includes a SEQUENCE_TARGET at the SNP site.
+    """
+    def write_block(seq_id, sequence, out):
         center = len(sequence) // 2
         out.write(f"SEQUENCE_ID={seq_id}\n")
         out.write(f"SEQUENCE_TEMPLATE={sequence}\n")
@@ -30,45 +43,57 @@ def fasta_to_primer3_input(fasta_path, output_path):
         out.write("PRIMER_MAX_TM=63.0\n")
         out.write("PRIMER_MIN_GC=20.0\n")
         out.write("PRIMER_MAX_GC=80.0\n")
-        out.write("PRIMER_EXPLAIN_FLAG=1\n")
         out.write("PRIMER_PRODUCT_SIZE_RANGE=80-120\n")
         out.write("PRIMER_NUM_RETURN=1\n")
+        out.write("PRIMER_EXPLAIN_FLAG=1\n")
         out.write("=\n")
 
     with open(fasta_path) as fasta, open(output_path, "w") as out:
         seq_id = None
         seq = []
         for line in fasta:
+            line = line.strip()
             if line.startswith(">"):
                 if seq_id:
-                    write_primer3_block(seq_id, "".join(seq), out)
-                seq_id = line.strip()[1:]
+                    write_block(seq_id, "".join(seq), out)
+                seq_id = line[1:]  # drop ">"
                 seq = []
             else:
-                seq.append(line.strip())
+                seq.append(line)
         if seq_id:
-            write_primer3_block(seq_id, "".join(seq), out)
+            write_block(seq_id, "".join(seq), out)
 
-def run_primer3(primer3_input_file, primer3_output_file):
-    subprocess.run(["primer3_core", primer3_input_file], stdout=open(primer3_output_file, "w"), check=True)
 
-def parse_primer3_output(primer3_output, csv_output):
-    with open(primer3_output) as infile, open(csv_output, "w", newline='') as outfile:
+def run_primer3(input_file, output_file):
+    """
+    Runs Primer3 on the provided input file and writes raw output.
+    """
+    try:
+        with open(output_file, "w") as out:
+            subprocess.run(["primer3_core", input_file], stdout=out, check=True)
+    except subprocess.CalledProcessError as e:
+
+
+def parse_primer3_output(input_file, csv_output):
+    """
+    Parses Primer3 output and writes a CSV with SNP ID, primers, and amplicon size.
+    """
+    with open(input_file) as infile, open(csv_output, "w", newline='') as outfile:
         writer = csv.writer(outfile)
         writer.writerow(["SNP_ID", "Forward_Primer", "Reverse_Primer", "Amplicon_Size", "Notes"])
+
         block = {}
-        count = 0
         for line in infile:
             line = line.strip()
             if not line:
                 continue
             if line == "=":
+                # Process a completed block
                 if all(k in block for k in ["SEQUENCE_ID", "PRIMER_LEFT_0", "PRIMER_RIGHT_0",
                                             "PRIMER_LEFT_0_SEQUENCE", "PRIMER_RIGHT_0_SEQUENCE"]):
                     left_pos = int(block["PRIMER_LEFT_0"].split(",")[0])
                     right_pos = int(block["PRIMER_RIGHT_0"].split(",")[0])
                     amplicon_size = right_pos + 1 - left_pos
-
                     writer.writerow([
                         block["SEQUENCE_ID"],
                         block["PRIMER_LEFT_0_SEQUENCE"],
@@ -76,25 +101,18 @@ def parse_primer3_output(primer3_output, csv_output):
                         amplicon_size,
                         ""
                     ])
-                    count += 1
                 block = {}
-            else:
-                if "=" in line:
-                    k, v = line.split("=", 1)
-                    block[k] = v
+            elif "=" in line:
+                k, v = line.split("=", 1)
+                block[k] = v
+
 
 def main():
-    input_fasta = "results/gtseq_design/cohort_snps_100bp.fa"
-    output_dir = "results/gtseq_design"
-    os.makedirs(output_dir, exist_ok=True)
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    fasta_to_primer3_input(INPUT_FASTA, PRIMER3_INPUT)
+    run_primer3(PRIMER3_INPUT, PRIMER3_OUTPUT)
+    parse_primer3_output(PRIMER3_OUTPUT, GTSEQ_CSV)
 
-    primer3_input_file = os.path.join(output_dir, "input.pr3")
-    primer3_output_file = os.path.join(output_dir, "output.txt")
-    gtseq_csv = os.path.join(output_dir, "gtseq_panel.csv")
-
-    fasta_to_primer3_input(input_fasta, primer3_input_file)
-    run_primer3(primer3_input_file, primer3_output_file)
-    parse_primer3_output(primer3_output_file, gtseq_csv)
 
 if __name__ == "__main__":
     main()
