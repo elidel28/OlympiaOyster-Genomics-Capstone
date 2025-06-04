@@ -143,14 +143,14 @@ python scripts/plink_filtering_pipeline.py
 
 ## Scripts Overview:
 
-| Script                            | Reads From                    | Writes To                       |
-| --------------------------------- | ----------------------------- | ------------------------------- |
-| `align_reads_with_RG.py`          | `fastq_dir`, `samples.csv`    | `sam_dir`                       |
-| `sam_to_sorted_bam.py`            | `sam_dir`                     | `bam_dir`, `sorted_bam_dir`     |
-| `variant_calling_bqsr.py`         | `sorted_bam_dir`, `reference` | `variants/`, `recal/`, `gvcfs/` |
-| `combine_gvcfs.py`                | `gvcfs/`, `reference`         | `combined/`                     |
-| `joint_genotyping_select_snps.py` | `combined/`, `reference`      | `genotyped/`                    |
-| `plink_filtering_pipeline.py`     | `genotyped/`                  | `plink_analysis/`               |
+| Script                            | Inputs                                            | Outputs                                                         |
+| --------------------------------- | ------------------------------------------------- | --------------------------------------------------------------- |
+| `align_reads_with_RG.py`          | `fastq`, `config/samples.csv`, `reference`        | `results/sam/`                                                  |
+| `sam_to_sorted_bam.py`            | `results/sam/`                                    | `results/bam/`, `results/bam/sorted/`                           |
+| `variant_calling_bqsr.py`         | `results/bam/sorted/`, `reference`, `samples.csv` | `results/variants/`, `results/recalibration/`, `results/gvcfs/` |
+| `combine_gvcfs.py`                | `results/gvcfs/`, `reference`                     | `results/combined/`                                             |
+| `joint_genotyping_select_snps.py` | `results/combined/`, `reference`                  | `results/genotyped/`                                            |
+| `plink_filtering_pipeline.py`     | `results/genotyped/`                              | `results/plink_analysis/`                                       |
 
 ### align_reads_with_RG: 
 This script aligns paired-end FASTQ reads to a reference genome using BWA-MEM, automatically extracts read group (@RG) information from each R1 file, and generates SAM files for each sample.
