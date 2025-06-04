@@ -32,24 +32,25 @@ OlympiaOyster-Genomics-Capstone/
 │   └── samples.csv
 │
 ├── results/                # All pipeline outputs organized by step
-│   ├── sam/                # SAM files from BWA
 │   ├── bam/                # BAM files
 │   ├── bam/sorted/         # Sorted and indexed BAMs
-│   ├── variants/           # Raw + filtered VCFs
-│   ├── recalibration/      # BQSR tables and recalibrated BAMs
-│   ├── gvcfs/              # Per-sample GVCFs
 │   ├── combined/           # Combined GVCF for joint calling
 │   ├── genotyped/          # Joint-genotyped VCFs and SNPs
-│   └── plink_analysis/     # Filtered SNPs and PLINK outputs
+│   ├── gvcfs/              # Per-sample GVCFs
+│   ├── plink_analysis/     # Filtered SNPs and PLINK outputs
+│   ├── recalibration/      # BQSR tables and recalibrated BAMs
+│   ├── sam/                # SAM files from BWA
+│   └── variants/           # Raw + filtered VCFs
 │
 ├── scripts/                # Individual pipeline steps
 │   ├── align_reads_with_RG.py
-│   ├── sam_to_sorted_bam.py
-│   ├── variant_calling_bqsr.py
+│   ├── annotate_gtseq_panel.py
 │   ├── combine_gvcfs.py
 │   ├── joint_genotyping_select_snps.py
 │   ├── plink_filtering_pipeline.py
-│   └── snp_annotation_and_filtering.py
+│   ├── primer3_gtseq_design.py
+│   ├── sam_to_sorted_bam.py
+│   └── variant_calling_bqsr.py
 │
 ├── environment.yml         # Conda environment file
 ├── run_pipeline.sh         # One-command pipeline runner
